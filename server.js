@@ -28,7 +28,7 @@ connection.connect((err)=>{
 app.post('/api/submit-form', (req, res) => {
   const { name, preferredLanguage, standardInput, sourceCode } = req.body;
 
-  const query = 'INSERT INTO userinput (name, preferred_language, standard_input, source_code) VALUES (?, ?, ?, ?)';
+  const query = 'INSERT INTO userinput (name, preferred_language, standard_input, source_code, submission_time) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)';
   connection.query(query, [name, preferredLanguage, standardInput, sourceCode], (err, result) => {
     if (err) {
       console.error('Error inserting data into database:', err);
