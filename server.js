@@ -9,7 +9,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
-  res.send("From Backend running");
+  res.send("CodeSnippetHub Backend Running");
 });
 
 const connection=mysql.createConnection({
@@ -52,6 +52,24 @@ app.get('/api/data', (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/api/user/:userName', (req, res) => {
+  const userName = req.params.userName;
+  const query = 'SELECT * FROM userinput WHERE name LIKE ?'; 
+  connection.query(query, [`%${userName}%`], (err, results) => {
+    if (err) {
+      console.error('Error querying database:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 app.get('/api/user/:userId', (req, res) => {
   const userId = req.params.userId;
